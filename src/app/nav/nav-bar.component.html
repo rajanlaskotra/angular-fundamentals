@@ -1,0 +1,49 @@
+<div class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" >ngEvents</a>
+      </div>
+  
+      <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li>
+            <a [routerLink]="['/events']" routerLinkActive="activeClass">All Events</a>
+          </li>
+          <li><a [routerLink]="['/event/new']" routerLinkActive="activeClass">Create Event</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" >
+              Events
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li *ngFor="let event of events">
+                <a [routerLink]="['/event/',event.id]" style="font-size: medium;">{{event.name | uppercase}}</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <div class="navbar-header navbar-right">
+          <ul class="nav navbar-nav">
+            <li>
+              <a *ngIf="!isAuthenticated()" [routerLink]="['/user/login']">Login</a>
+              <a *ngIf="isAuthenticated()" [routerLink]="['/user/profile']">Welcome {{auth.currentUser.firstName}}</a>
+            </li>
+          </ul>
+        </div>
+        <form id="searchForm" (ngSubmit)="searchSession(searchTerm)" class="navbar-form navbar-right"  >
+          <div class="form-group">
+            <input [(ngModel)]="searchTerm" name="searchTerm" type="text" class="form-control" placeholder="Search Sessions" >
+          </div>
+          <button class="btn btn-default" modal-trigger="searchResults">  <!-- directive with input -->
+            Search
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <simple-modal elementId="searchResults" title="Matching Sessions"> <!-- elementId,title is input property on component simple-modal -->
+    <div class="list-group">
+      <a class="list-group-item" [routerLink]="['/event',session.eventId]" *ngFor="let session of foundSessions">{{session.name}}</a>
+    </div>
+  </simple-modal>
